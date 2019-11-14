@@ -13,12 +13,12 @@
     </div>
     <!-- <video id="video" controls style="float:left;max-height: 900px;min-height: 340px"></video> -->
     <div v-if="getlist_rsp.data.length > 1 " v-for="(item,index) in getlist_rsp.data" class="unit" >
-      <div style="margin:10px; border:0px;text-decoration:none">
-        <!-- <img v-bind:src="item.imageUrl" style="width:18px;height:23px;"> -->	
+      <div style="margin:10px; border:0px;text-decoration:none;float:left;width:220px;height:340px">
+        <img v-bind:src="item.imageUrl" style="width:180px;height:230px;">
         <p>
-			<a v-bind:href="item.url" style="text-decoration:none">{{ index+1 }}.  
-			<span style="color:blue;">{{ item.hosttitle }}</span>:
-			<span style="color:red;">{{ item.title }}</span>
+			<a v-bind:href="item.url" style="text-decoration:none">
+			<!-- <span style="color:blue;">{{ item.hosttitle }}</span> -->
+			<span style="">{{ item.title }}</span>
 			<span style="color:#C0C0C0;">({{ item.msg }})</span>
 			</a>
 		</p>

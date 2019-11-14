@@ -41,7 +41,7 @@ async function getlist(host, wd) {
 			await page.goto(url, {
 				waitUntil: 'domcontentloaded'
 			});
-			await page.waitFor(2000);
+			await page.waitFor(3000);//页面加载后等待3s,解决99%图片慢加载问题;
 		} catch (e) {
 			console.log(host.title, "Result SyncError", e); //引擎结果2,异步调用过程中出错
 			// close browser

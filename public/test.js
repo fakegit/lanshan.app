@@ -54,10 +54,10 @@ var vm = new Vue({
             //3次调用还未找到10个结果时将关闭自动查询，极有可能关键字错误，否则将无限查询下去；
             if (loaded >= 3 && counts < 5) {
                 console.log("%s次调用查询到%s条结果,试试换个关键字...", loaded, counts);
-            } else if (counts < 10) {
+            } else if (counts < 5) {
                 console.log("%s次调用查询到%s条结果,即将使用更多引擎...", loaded, counts);
                 this.querymore();
-            } else if (counts >= 10) {
+            } else if (counts >= 5) {
                 console.log("%s次调用查询到%s条结果！", loaded, counts);
             }
         },

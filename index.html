@@ -1,31 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
 
-<body style="margin: 0px;background-image:url(./public/img/bg.jpg); background-repeat:no-repeat;background-size: cover;-o-background-size: cover;-webkit-background-size: cover; -moz-background-size:cover;">
-<!--background: #0e0e0e;-->
-<script src="./public/ext/vue.min.js"></script>
-<script src="./public/ext/hls.min.js"></script>
-<script src="./public/ext/jquery-1.8.3.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>阑珊影视</title>
+  <script src="./public/ext/vue.min.js"></script>
+  <script src="./public/ext/hls.min.js"></script>
+  <script src="./public/ext/jquery-1.8.3.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<div id="app-4"  >
-  <div id="wf" style="margin:0 auto; width:80%;">
-    <div style="margin:10px;">
-      <input v-model="querywd" v-bind:placeholder="placeholder" size="50" type='text'/>
-      <button v-on:click="querypage">查询</button>
+    body {
+      margin: 0;
+      padding: 0;
+      /* background: #494A5F; */
+      font-weight: 500;
+      font-family: "Microsoft YaHei", "宋体", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
+      background-image: url(./public/img/bg.jpg);
+      background-repeat: no-repeat;
+      background-size: cover;
+      -o-background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+    }
+
+    #app {
+      width: 80%;
+      /* height: 820px; */
+      margin: 0 auto;
+    }
+
+    div.search {
+      padding: 30px 0;
+    }
+
+    form {
+      position: relative;
+      width: 60%;
+      /* width: 300px; */
+      margin: 0 auto;
+    }
+
+    input,
+    button {
+      border: none;
+      outline: none;
+    }
+
+    input {
+      width: 100%;
+      height: 42px;
+      padding-left: 13px;
+    }
+
+    button {
+      height: 42px;
+      width: 42px;
+      cursor: pointer;
+      position: absolute;
+    }
+
+    /*搜索框6*/
+    .bar6 input {
+      border: 2px solid #c5464a;
+      border-radius: 5px;
+      background: transparent;
+      top: 0;
+      right: 0;
+    }
+
+    .bar6 button {
+      background: #c5464a;
+      border-radius: 0 5px 5px 0;
+      width: 60px;
+      top: 0;
+      right: 0;
+    }
+
+    .bar6 button:before {
+      content: "搜索";
+      font-size: 13px;
+      color: #F9F0DA;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+
+    <div class="search bar6">
+      <form>
+        <input type="text" v-model="querywd" v-bind:placeholder="placeholder" size="50"/>
+        <button type="submit" v-on:click="querypage"></button>
+      </form>
     </div>
-    <!-- <video id="video" controls style="float:left;max-height: 900px;min-height: 340px"></video> -->
-    <div v-if="getlist_rsp.data.length > 1 " v-for="(item,index) in getlist_rsp.data" class="unit" >
+
+    <div v-if="getlist_rsp.data.length > 1 " v-for="(item,index) in getlist_rsp.data" class="unit">
       <div style="margin:10px; border:0px;text-decoration:none;float:left;width:220px;height:340px">
-        <img v-bind:src="item.imageUrl" style="width:180px;height:230px;">
+        <img v-bind:src="item.imageUrl" style="width:180px;height:230px;" />
         <p>
-			<a v-bind:href="item.url" style="text-decoration:none">
-			<!-- <span style="color:blue;">{{ item.hosttitle }}</span> -->
-			<span style="">{{ item.title }}</span>
-			<span style="color:#C0C0C0;">({{ item.msg }})</span>
-			</a>
-		</p>
+          <a v-bind:href="item.url" style="text-decoration:none">
+            <!-- <span style="color:blue;">{{ item.hosttitle }}</span> -->
+            <span>{{ item.title }}</span>
+            <span style="color:#C0C0C0;">({{ item.msg }})</span>
+          </a>
+        </p>
       </div>
     </div>
-	<div v-if="getlist_rsp.data.length > 1 " style="margin:10px; border:0px;"><button v-on:click="querymore">加载更多</button></div>
+
+    <div v-if="getlist_rsp.data.length > 1 " style="margin:10px; border:0px;">
+      <button v-on:click="querymore">加载更多</button>
+    </div>
+
   </div>
-</div>
-<script src="./public/test.js"></script>
+
+  <script src="./public/test.js"></script>
+
 </body>
+
+</html>

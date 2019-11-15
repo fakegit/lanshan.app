@@ -1,8 +1,6 @@
-﻿
-var vm = new Vue({
-    el: '#app-4',
+﻿var vm = new Vue({
+    el: '#app',
     data: {
-        "getlist_url": "http://66yy.in/index.php?m=vod-search&wd=**", //&pg=&t=
         "getlist_rsp": {
             "data": [{
                 "title": "",
@@ -12,10 +10,9 @@ var vm = new Vue({
                 "hosttitle": ""
             }]
         },
-        "classid": "",
         "querywd": null,
-        "placeholder": "西行纪",
-        "page":0,//查询次数
+        "placeholder": "冰海战纪",
+        "page": 0, //查询次数
     },
 
     methods: {
@@ -23,8 +20,8 @@ var vm = new Vue({
             //向nodejs后端发送get请求,由后端调用外部引擎,解决跨域问题;
             console.log(url);
             var list = await fetch(url).then(function (response) {
-                    return response.json();
-                }).catch(e => console.log("Oops, error", e));
+                return response.json();
+            }).catch(e => console.log("Oops, error", e));
             console.log(list);
             return list;
         },
@@ -34,14 +31,14 @@ var vm = new Vue({
             this.getlist_rsp.data = [];
             this.querywd = this.querywd || this.placeholder; //若没有输入则查询提示的内容
             var newlist = await this.search('/search?wd=' + this.querywd + '&page=' + this.page);
-            console.log(newlist);
+            //console.log(newlist);
             this.getlist_rsp.data = newlist;
             this.autoquerymore();
         },
         querymore: async function () {
             this.page += 1;
             this.querywd = this.querywd || this.placeholder;
-            var newlist = await this.search('/search?wd=' + this.querywd + '&page=' + this.page);//需要新参数
+            var newlist = await this.search('/search?wd=' + this.querywd + '&page=' + this.page); //需要新参数
             var oldlist = this.getlist_rsp.data;
             this.getlist_rsp.data.push.apply(oldlist, newlist);
             this.autoquerymore();
@@ -49,7 +46,7 @@ var vm = new Vue({
         autoquerymore: function () {
             //使用了几个引擎客户端不再关心，不可见，只关心查到了几条够不够；故策略改为少于10条时自动查询；
             var loaded = this.page + 1;
-            var counts = this.getlist_rsp.data?this.getlist_rsp.data.length:0;
+            var counts = this.getlist_rsp.data ? this.getlist_rsp.data.length : 0;
 
             //3次调用还未找到10个结果时将关闭自动查询，极有可能关键字错误，否则将无限查询下去；
             if (loaded >= 3 && counts < 5) {

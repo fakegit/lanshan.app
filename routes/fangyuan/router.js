@@ -1,13 +1,13 @@
 const hostlist = require("./678.json");
 const puppeteer = require('puppeteer');
 
-async function route(wd,page) {
+async function route(wd, page) {
 	var data = [];
 	var once_nums = 1;
 	//console.log("serach wd = " + wd);
 	for (var i = 0; i < once_nums; i++) {
 		//console.log("hostlist[%s] = ", i, hostlist[i].title);
-		var index = i+page*once_nums;
+		var index = i + page * once_nums;
 		if (index < hostlist.length) {
 			newlist = await getlist(hostlist[index], wd);
 			//追加新的list
@@ -41,17 +41,13 @@ async function getlist(host, wd) {
 			await page.goto(url, {
 				waitUntil: 'domcontentloaded'
 			});
-			await page.waitFor(3000);//页面加载后等待3s,解决99%图片慢加载问题;
+			await page.waitFor(3000); //页面加载后等待3s,解决99%图片慢加载问题;
 		} catch (e) {
 			console.log(host.title, "Result SyncError", e); //引擎结果2,异步调用过程中出错
-			// close browser
 			browser.close();
-			// exit code 1 indicating an error happened
-			//code = 1;
-			//process.emit("exit ");
-			//process.reallyExit(code);
 			return [];
 		}
+
 		//parse
 		const results = await page.evaluate((host) => {
 			var results = [];
@@ -71,70 +67,80 @@ async function getlist(host, wd) {
 			let items = $(list_q);
 			if (items.length >= 1) {
 				items.each((index, item) => {
+					let el = $(item);
 					//get title
-					var titlestr = "";
-					var t1 = $(item).find(title_ql[0]).attr(title_ql[1]);
-					var t2 = $(item).find(title_ql[0] + " " + title_ql[1]).text().trim();
-					var t3 = $(item).find(title_ql[0]).text().trim();
-					if (t1) {
-						titlestr = t1;
+					function gettitle(el, title_ql) {
+						var t1 = el.find(title_ql[0]).attr(title_ql[1]);
+						var t2 = el.find(title_ql[0] + " " + title_ql[1]).text().trim();
+						var t3 = el.find(title_ql[0]).text().trim();
 						//console.log("%s,t1=$('%s').find('%s').attr('%s')",host.title,item,title_ql[0],title_ql[1]);
-					} else if (t2) {
-						titlestr = t2;
 						//console.log("%s,t2=$('%s').find('%s %s').text().trim()",host.title,item,title_ql[0],title_ql[1]);
-					} else if (t3) {
-						titlestr = t3;
 						//console.log("%s,t3=$('%s').find('%s').text().trim()",host.title,item,title_ql[0]);
+						return t1 ? t1 : t2 ? t2 : t3 ? t3 : "";
 					}
+					var titlestr = gettitle(el, title_ql);
+					if (!titlestr) return;
+
 					//get msg
-					var msgstr = "";
-					var msg_ql_fix = msg_ql[0].split(",");
-					if (msg_ql_fix.length > 1) {
-						var m0 = msg_ql_fix[0];
-						var m1 = msg_ql_fix[1];
-						msgstr = $($(item).find(m0)[m1]).text().trim();
-						//console.log("%s,msg0=$($('%s').find('%s')[%s]).text().trim()",host.title,item,m0,m1);
-					} else {
-						msgstr1 = $(item).find(msg_ql[0]).attr(msg_ql[1]);
-						msgstr2 = $(item).find(msg_ql[0] + msg_ql[1]).text().trim();
-						msgstr3 = $(item).find(msg_ql[0]).text().trim();
-						if (msgstr1) {
-							msgstr = msgstr1;
+					function getmsg(el, msg_ql) {
+						var msg_ql_fix = msg_ql[0].split(",");
+						if (msg_ql_fix.length > 1) {
+							var m0 = msg_ql_fix[0];
+							var m1 = msg_ql_fix[1];
+							msgstr0 = $(el.find(m0)[m1]).text().trim();
+							//console.log("%s,msg0=$($('%s').find('%s')[%s]).text().trim()",host.title,item,m0,m1);
+							return msgstr0;
+						} else {
+							msgstr1 = el.find(msg_ql[0]).attr(msg_ql[1]);
+							msgstr2 = el.find(msg_ql[0] + msg_ql[1]).text().trim();
+							msgstr3 = el.find(msg_ql[0]).text().trim();
 							//console.log("%s,msg1=$('%s').find('%s').attr('%s') ",host.title,item,msg_ql[0],msg_ql[1]);
-						} else if (msgstr2) {
-							msgstr = msgstr2;
-							//console.log("%s,msg2=,$('%s').find('%s%s').text().trim()",host.title,item,msg_ql[0],msg_ql[1]);				
-						} else if (msgstr3) {
-							msgstr = msgstr3;
-							//console.log("%s,msg3=,$('%s').find('%s').text().trim()",host.title,item,msg_ql[0],msg_ql[1]);			
+							//console.log("%s,msg2=,$('%s').find('%s%s').text().trim()",host.title,item,msg_ql[0],msg_ql[1]);
+							//console.log("%s,msg3=,$('%s').find('%s').text().trim()",host.title,item,msg_ql[0],msg_ql[1]);								
+							return msgstr1 ? msgstr1 : msgstr2 ? msgstr2 : msgstr3 ? msgstr3 : "";
+						}
+					}
+					var msgstr = getmsg(el, msg_ql);
+					if (!msgstr) return;
+
+					function urlfix(baseurl_fix, url) {
+						var a = baseurl_fix.split('.');
+						var b = a[a.length - 2];
+						if (url.indexOf(b) != -1 || url.indexOf("www") != -1 || url.indexOf("com") != -1 || url.indexOf("cn") != -1) {
+							return url;
+						} else {
+
+							return baseurl_fix + url;
 						}
 					}
 
 					//get url
-					var urlstr = "";
-					var url1 = $(item).find(url_ql[0]).attr(url_ql[1]);
-					var url2 = (url_ql.length > 2) ? $(item).find(url_ql[0] + " " + url_ql[1]).attr(url_ql[2]) : "";
-					if (url1) {
-						urlstr = baseurl_fix + url1;
+					function geturl(el, url_ql) {
+						var urlstr = "";
+						var url1 = el.find(url_ql[0]).attr(url_ql[1]);
+						var url2 = (url_ql.length > 2) ? el.find(url_ql[0] + " " + url_ql[1]).attr(url_ql[2]) : "";
 						//console.log("%s,url1=$('%s').find('%s').attr('%s')",host.title,item,url_ql[0],url_ql[1]);
-					} else if (url2) {
-						urlstr = baseurl_fix + url2;
-						//console.log("%s,url2=$('%s').find('%s %s').attr('%s')",host.title,item,url_ql[0],url_ql[1],url_ql[2]);				
+						//console.log("%s,url2=$('%s').find('%s %s').attr('%s')",host.title,item,url_ql[0],url_ql[1],url_ql[2]);
+						var url = url1 ? url1 : url2 ? url2 : "";
+						return url ? urlfix(baseurl_fix, url) : "";
+
 					}
+					var urlstr = geturl(el, url_ql);
+					//if (!urlstr) return;
 
 					//get imageUrl
-					var imageUrlstr = "";
-					var img1 = $(item).find('img').attr('src');
-					var img2 = $(item).find('dt a').attr('data-original');
-					if (img1) {
-						imageUrlstr = baseurl_fix + img1;
+					function getimgurl(el) {
+						var imageUrlstr = "";
+						var img1 = el.find('img').attr('src');
+						var img2 = el.find('dt a').attr('data-original');
 						//console.log("%s,img1=$('%s').find('img').attr('src')",host.title,item);
-					} else if (img2) {
-						imageUrlstr = baseurl_fix + img2;
 						//console.log("%s,img2=$('%s').find('dt a').attr('data-original')",host.title,item);
+						img = img1 ? img1 : img2 ? img2 : "";
+						return img ? urlfix(baseurl_fix, img) : "";
 					}
+					var imageUrlstr = getimgurl(el);
+					//if (!imageUrlstr) return;
 
-					if (!titlestr && !urlstr && !msgstr && !imageUrlstr) return;
 					results.push({
 						title: titlestr,
 						url: urlstr,
@@ -147,13 +153,13 @@ async function getlist(host, wd) {
 			}
 			//console.log(results);
 			return results;
-		},host);//host参数放在这里
+		}, host); //host参数放在这里
 
-		console.log(host.title, "Result ok",results.length);//console.log(host.title, "Result ok", results); //引擎结果1,成功输出	
-		// shutdown browser
+		console.log(host.title, "Result ok", results.length); //console.log(host.title, "Result ok", results); //引擎结果1,成功输出	
+
 		browser.close();
 
-		return results; //不清楚能否返回正确的值
+		return results;
 
 	} catch (e) {
 		console.log(host.title, "Result CodeError", e, host.searchFind); //引擎结果3,代码解析出错

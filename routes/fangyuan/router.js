@@ -1,5 +1,6 @@
 const hostlist = require("./678.json");
 const puppeteer = require('puppeteer');
+// const local_jquery = require("../../public/ext/jquery-1.8.3.js");
 
 async function route(wd, page) {
 	var data = [];
@@ -38,6 +39,7 @@ async function getlist(host, wd) {
 				.mainFrame()
 				.addScriptTag({
 					url: 'https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js'
+					// url:local_jquery //不能加载本地jquery,报错 ：ReferenceError: window is not defined
 				});
 			await page.goto(url, {
 				waitUntil: 'domcontentloaded'

@@ -48,42 +48,6 @@
         "weight": 664
     },
     {
-        "baseUrl": "https://www.dut8.com",
-        "chapterFind": ".detail-img&&img&&src;.detail-intro-txt&&Text;body&&.filmSelectWrap@li;a&&Text;a&&href;body&&.filmSources&&li@Text",
-        "forFearch": false,
-        "id": 1207,
-        "movieFind": "",
-        "pinYinTitle": "duteyingshi",
-        "searchFind": "body&&.detail-wrap;a&&title;a&&href",
-        "searchUrl": "https://www.dut8.com/search.html?wd=**;get;UTF-8;{User-Agent@Opera/9.80 (Android 2.3.4；； Linux；； Opera Mobi/build-1107180945；； U；； en-GB) Presto/2.8.149 Version/11.10&&charset@UTF-8}",
-        "title": "独特影视",
-        "weight": 675
-    },
-    {
-        "baseUrl": "http://m.diezhan.me",
-        "chapterFind": ".pic&&src;.description&&Text;.playlist@li;a&&Text;a&&href",
-        "forFearch": false,
-        "id": 1210,
-        "movieFind": "",
-        "pinYinTitle": "diezhanmi",
-        "searchFind": ".mb&&li;a&&title;a&&href",
-        "searchUrl": "http://m.diezhan.me/search.asp?searchword=**;get;gb2312",
-        "title": "谍战迷",
-        "weight": 678
-    },
-    {
-        "baseUrl": "https://m.halihali.me",
-        "chapterFind": ".detail-img&&img&&src;.detail-intro-txt&&Text;body&&.detail-video-select@li;a&&Text;a&&href;body&&#filmSelectWrap&&li@Text",
-        "forFearch": false,
-        "id": 1209,
-        "movieFind": "",
-        "pinYinTitle": "halihali",
-        "searchFind": "body&&.detail-media;a&&Text;a&&href;.ellipsis-1,1&&Text",
-        "searchUrl": "https://m.halihali.me/search/?wd=**",
-        "title": "哈哩哈哩",
-        "weight": 677
-    },
-    {
         "baseUrl": "http://www.kugua77.com",
         "chapterFind": ".detail-poster&&img&&src;.detail-intro&&Text!剧情：;.detail-content&&ul@li;a&&Text;a&&href;.detail-tab&&li@Text",
         "forFearch": false,
@@ -274,6 +238,30 @@
         "searchUrl": "http://8maple.ru/搜尋結果/?q=**",
         "title": "枫林网",
         "weight": 656
+    },
+    {
+        "baseUrl": "http://m.diezhan.me",
+        "chapterFind": ".pic&&src;.description&&Text;.playlist@li;a&&Text;a&&href",
+        "forFearch": false,
+        "id": 1210,
+        "movieFind": "",
+        "pinYinTitle": "diezhanmi",
+        "searchFind": ".mb&&li;a&&title;a&&href",
+        "searchUrl": "http://m.diezhan.me/search.asp?searchword=**;get;gb2312",
+        "title": "谍战迷",
+        "weight": 678
+    },
+    {
+        "baseUrl": "https://m.halihali.me",
+        "chapterFind": ".detail-img&&img&&src;.detail-intro-txt&&Text;body&&.detail-video-select@li;a&&Text;a&&href;body&&#filmSelectWrap&&li@Text",
+        "forFearch": false,
+        "id": 1209,
+        "movieFind": "",
+        "pinYinTitle": "halihali",
+        "searchFind": "body&&.detail-media;a&&Text;a&&href;.ellipsis-1,1&&Text",
+        "searchUrl": "https://m.halihali.me/search/?wd=**",
+        "title": "哈哩哈哩",
+        "weight": 677
     },
     {
         "baseUrl": "https://www.diediaow.com",

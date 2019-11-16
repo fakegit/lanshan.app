@@ -10,8 +10,9 @@
                 "hosttitle": ""
             }]
         },
+        "tips":"众里寻《剧》用百度？蓦然回首,那《剧》却在阑珊影视处 o(∩_∩)o ",
         "querywd": null,
-        "placeholder": "冰海战纪",
+        "placeholder": "一拳超人",
         "page": 0, //查询次数
     },
 
@@ -44,18 +45,16 @@
             this.autoquerymore();
         },
         autoquerymore: function () {
-            //使用了几个引擎客户端不再关心，不可见，只关心查到了几条够不够；故策略改为少于10条时自动查询；
             var loaded = this.page + 1;
             var counts = this.getlist_rsp.data ? this.getlist_rsp.data.length : 0;
-
-            //3次调用还未找到10个结果时将关闭自动查询，极有可能关键字错误，否则将无限查询下去；
+            //3次调用还未找到5个结果时将关闭自动查询，极有可能关键字错误，否则将无限查询下去；
             if (loaded >= 3 && counts < 5) {
-                console.log("%s次调用查询到%s条结果,试试换个关键字...", loaded, counts);
+                this.tips =  `${loaded}次查询获得${counts}条结果,试试换个关键字...查询完毕！`;
             } else if (counts < 5) {
-                console.log("%s次调用查询到%s条结果,即将使用更多引擎...", loaded, counts);
+                this.tips = `${loaded}次查询获得${counts}条结果,即将调用更多引擎...`;
                 this.querymore();
             } else if (counts >= 5) {
-                console.log("%s次调用查询到%s条结果！", loaded, counts);
+                this.tips = `${loaded}次查询获得${counts}条结果！查询完毕！`;
             }
         },
     }

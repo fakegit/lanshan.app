@@ -16,10 +16,10 @@
     body {
       margin: 0;
       padding: 0;
-      /* background: #494A5F; */
+      background: rgb(236, 234, 234);
       font-weight: 500;
       font-family: "Microsoft YaHei", "宋体", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
-      background-image: url(./public/img/bg.jpg);
+      /* background-image: url(./public/img/bg.jpg); */
       background-repeat: no-repeat;
       background-size: cover;
       -o-background-size: cover;
@@ -29,7 +29,6 @@
 
     #app {
       width: 80%;
-      /* height: 820px; */
       margin: 0 auto;
     }
 
@@ -37,10 +36,9 @@
       padding: 30px 0;
     }
 
-    form {
+    div.likeform {
       position: relative;
       width: 60%;
-      /* width: 300px; */
       margin: 0 auto;
     }
 
@@ -65,7 +63,7 @@
 
     /*搜索框6*/
     .bar6 input {
-      border: 2px solid #c5464a;
+      border: 2px solid rgb(51, 131, 235);
       border-radius: 5px;
       background: transparent;
       top: 0;
@@ -73,7 +71,7 @@
     }
 
     .bar6 button {
-      background: #c5464a;
+      background: rgb(51, 131, 235);
       border-radius: 0 5px 5px 0;
       width: 60px;
       top: 0;
@@ -92,32 +90,34 @@
   <div id="app">
 
     <div class="search bar6">
-      <form>
-        <input type="text" v-model="querywd" v-bind:placeholder="placeholder" size="50"/>
+      <h1 style="text-align: center; color: rgb(51, 131, 235);">阑珊影视</h1>
+      <div class="likeform">
+        <input type="text" v-model="querywd" v-bind:placeholder="placeholder" @keyup.enter="querypage" size="50" />
         <button type="submit" v-on:click="querypage"></button>
-      </form>
-    </div>
-
-    <div v-if="getlist_rsp.data.length > 1 " v-for="(item,index) in getlist_rsp.data" class="unit">
-      <div style="margin:10px; border:0px;text-decoration:none;float:left;width:220px;height:340px">
-        <img v-bind:src="item.imageUrl" style="width:180px;height:230px;" />
-        <p>
-          <a v-bind:href="item.url" style="text-decoration:none">
-            <!-- <span style="color:blue;">{{ item.hosttitle }}</span> -->
-            <span>{{ item.title }}</span>
-            <span style="color:#C0C0C0;">({{ item.msg }})</span>
-          </a>
-        </p>
+      </div>
+      <div style="text-align: center;">
+        <span style="color: rgb(189, 196, 201);" >{{ tips }}</span>
+        <a v-if="getlist_rsp.data.length > 1 " v-on:click="querymore" type="submit" style="size: 18px;width: 80px;">【查询更多】</a>
       </div>
     </div>
 
-    <div v-if="getlist_rsp.data.length > 1 " style="margin:10px; border:0px;">
-      <button v-on:click="querymore">加载更多</button>
+    <div>
+      <div v-if="getlist_rsp.data.length > 1 " v-for="(item,index) in getlist_rsp.data" class="unit">
+        <a target="_blank" v-bind:href="item.url"
+          style="margin:10px; border:0px;text-decoration:none;float:left;width:180px;height:300px">
+          <img v-if="item.imageUrl.indexOf('load.gif') != -1 " src="./public/img/load.gif"
+            style="width:183px;height:257px;" />
+          <img v-else v-bind:src="item.imageUrl" style="width:183px;height:257px;" />
+          <span>{{ item.title }}</span>
+          <span style="color:rgb(238, 117, 117);">{{ item.msg }}</span>
+          <!-- <span style="color:rgb(181, 181, 192);">{{ item.hosttitle }}</span> -->
+        </a>
+      </div>
     </div>
 
   </div>
 
-  <script src="./public/test.js"></script>
+  <script src="./public/index.js"></script>
 
 </body>
 
